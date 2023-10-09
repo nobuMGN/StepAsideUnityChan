@@ -16,13 +16,24 @@ public class ItemGenerator : MonoBehaviour
     private int goalPos = 360;
     //アイテムを出すx方向の範囲
     private float posRange = 3.4f;
+    private float lastzposition = 0;
+    private GameObject unitychan;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Unityちゃんのオブジェクトを取得
+        this.unitychan = GameObject.Find("unitychan");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         //一定の距離ごとにアイテムを生成
-        for (int i = startPos; i < goalPos; i += 15)
+        if(unitychan.transform.position.z - this.lastzposition >= 15)
         {
+            lastzposition = unitychan.transform.position.z;
+
             //どのアイテムを出すのかをランダムに設定
             int num = Random.Range(1, 11);
             if (num <= 2)
@@ -31,7 +42,7 @@ public class ItemGenerator : MonoBehaviour
                 for (float j = -1; j <= 1; j += 0.4f)
                 {
                     GameObject cone = Instantiate(conePrefab);
-                    cone.transform.position = new Vector3(4 * j, cone.transform.position.y, i);
+                    cone.transform.position = new Vector3(4 * j, cone.transform.position.y, unitychan.transform.position.z + 40);
                 }
             }
             else
@@ -49,22 +60,16 @@ public class ItemGenerator : MonoBehaviour
                     {
                         //コインを生成
                         GameObject coin = Instantiate(coinPrefab);
-                        coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, i + offsetZ);
+                        coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, unitychan.transform.position.z + 40 + offsetZ);
                     }
                     else if (7 <= item && item <= 9)
                     {
                         //車を生成
                         GameObject car = Instantiate(carPrefab);
-                        car.transform.position = new Vector3(posRange * j, car.transform.position.y, i + offsetZ);
+                        car.transform.position = new Vector3(posRange * j, car.transform.position.y, unitychan.transform.position.z + 40 + offsetZ);
                     }
                 }
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
